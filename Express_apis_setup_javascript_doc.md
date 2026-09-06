@@ -251,7 +251,7 @@ export const validate = (schema) => (req, res, next) => {
     });
   }
 
-  req.body = result.data;
+  req.validated = result.data;
   next(); // Data is valid, proceed to controller!
 };
 ```
@@ -363,7 +363,7 @@ import authService from '../services/authService.js';
 class AuthController {
   async register(req, res, next) {
     try {
-      const result = await authService.register(req.body);
+      const result = await authService.register(req.validated);
       res.status(201).json({ success: true, message: 'User registered successfully', data: result });
     } catch (error) {
       next(error);
@@ -372,7 +372,7 @@ class AuthController {
 
   async login(req, res, next) {
     try {
-      const result = await authService.login(req.body);
+      const result = await authService.login(req.validated);
       res.status(200).json({ success: true, message: 'Login successful', data: result });
     } catch (error) {
       next(error);
@@ -553,7 +553,7 @@ class UserController {
 
   async update(req, res, next) {
     try {
-      const updated = await userService.updateUser(req.params.id, req.body);
+      const updated = await userService.updateUser(req.params.id, req.validated);
       res.status(200).json({ success: true, message: 'Updated successfully', data: updated });
     } catch (error) { next(error); }
   }
